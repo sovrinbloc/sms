@@ -29,8 +29,8 @@
       <file leaf-file-name="2018_05_04_022549_matching_algorithm.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/database/migrations/2018_05_04_022549_matching_algorithm.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="119" column="0" lean-forward="true" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+            <state relative-caret-position="259">
+              <caret line="60" column="27" lean-forward="false" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="27" />
               <folding>
                 <element signature="e#7#45#0#PHP" expanded="true" />
               </folding>
@@ -263,7 +263,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.PHP" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
-    <property name="SearchEverywhereHistoryKey" value="config/ap&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/config/app.php&#10;ide_&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/_ide_helper_models.php&#10;migrations&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/database/migrations" />
+    <property name="SearchEverywhereHistoryKey" value="composer.lock&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/composer.lock&#10;composer.&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/composer.json&#10;config/ap&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/config/app.php&#10;ide_&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/_ide_helper_models.php&#10;migrations&#9;FILE&#9;file:///Users/joealai/Projects/sm-social/sm-social/database/migrations" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -290,12 +290,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1525398846833</updated>
-      <workItem from="1525398848365" duration="10897000" />
+      <workItem from="1525398848365" duration="12143000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10897000" />
+    <option name="totallyTimeSpent" value="12143000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1461" height="947" extended-state="0" />
@@ -351,6 +351,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/composer.lock">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="26" lean-forward="false" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -363,8 +379,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2018_05_04_022549_matching_algorithm.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="119" column="0" lean-forward="true" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+        <state relative-caret-position="259">
+          <caret line="60" column="27" lean-forward="false" selection-start-line="60" selection-start-column="20" selection-end-line="60" selection-end-column="27" />
           <folding>
             <element signature="e#7#45#0#PHP" expanded="true" />
           </folding>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class MatchingCriteria extends Migration
+class MatchingAlgorithm extends Migration
 {
     /**
      * Run the migrations.
@@ -56,33 +56,45 @@ class MatchingCriteria extends Migration
         Schema::create(
             self::TABLE_NAME_ANSWER_SET, function (Blueprint $table) {
             $table->increments('id');
-            $table->foreign('set')->references('id')->on(self::TABLE_NAME_ANSWER_SETS);
-            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING);
+            $table->integer('set');
+            $table->integer('answer');
             $table->primary(['set', 'answer']);
-
         });
 
+        Schema::table(self::TABLE_NAME_ANSWER_SET, function (Blueprint $table) {
+            $table->foreign('set')->references('id')->on(self::TABLE_NAME_ANSWER_SETS);
+            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING);
+        });
 
         /** answers that belong  to which question */
         Schema::create(
             self::TABLE_NAME_ANSWER_QUESTION, function (Blueprint $table) {
             $table->increments('id');
-            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING);
-            $table->foreign('question')->references('id')->on(self::TABLE_NAME_CRITERIA);
+            $table->integer('answer');
+            $table->integer('question');
             $table->string('attribute_name')->unique();
             $table->primary(['answer', 'question']);
 
+        });
+
+        Schema::table(self::TABLE_NAME_ANSWER_QUESTION, function (Blueprint $table) {
+            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING);
+            $table->foreign('question')->references('id')->on(self::TABLE_NAME_CRITERIA);
         });
 
         /** the actual answers from the user to each question, pivot-table */
         Schema::create(
             self::TABLE_NAME_USER_ANSWER_QUESTION, function (Blueprint $table) {
             $table->increments('id');
-            $table->foreign('users')->references('id')->on('users');
-            $table->foreign('answer_question_id')->references('id')->on(self::TABLE_NAME_ANSWER_QUESTION);
+            $table->integer('user_id');
+            $table->integer('answer_question_id');
             $table->timestamps();
             $table->primary(['users', self::TABLE_NAME_ANSWER_QUESTION]);
 
+        });
+        Schema::table(self::TABLE_NAME_USER_ANSWER_QUESTION, function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('answer_question_id')->references('id')->on(self::TABLE_NAME_ANSWER_QUESTION);
         });
 
         /** Titles of Categories */
@@ -96,8 +108,12 @@ class MatchingCriteria extends Migration
         Schema::create(
             self::TABLE_NAME_ANSWER_QUESTION_WEIGHT, function (Blueprint $table) {
             $table->increments('id');
-            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWER_QUESTION)->unique();
+            $table->integer('answer');
             $table->double('weight');
+        });
+        Schema::table(self::TABLE_NAME_ANSWER_QUESTION_WEIGHT, function (Blueprint $table) {
+            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWER_QUESTION)->unique();
+
         });
 
 
@@ -114,8 +130,12 @@ class MatchingCriteria extends Migration
             $table->double('inequality_greater_than_weight_value');
 
             //-1 for no category
-            $table->foreign('category')->references('id')->on('question_sets');
+            $table->integer('category');
             $table->string('description')->unique();
+        });
+        Schema::table(self::TABLE_NAME_WEIGHTS, function (Blueprint $table) {
+            $table->foreign('category')->references('id')->on('question_sets');
+
         });
 
 
@@ -123,11 +143,15 @@ class MatchingCriteria extends Migration
         Schema::create(
             self::TABLE_NAME_CUSTOM_CRITERION_WEIGHT, function (Blueprint $table) {
             $table->increments('id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWER_QUESTION);
+            $table->integer('user_id');
+            $table->integer('answer');
             $table->double('weight');
             $table->timestamps();
             $table->primary(['user_id', 'answer']);
+        });
+        Schema::table(self::TABLE_NAME_CUSTOM_CRITERION_WEIGHT, function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWER_QUESTION);
         });
 
 
