@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -27,7 +28,6 @@ class MatchingAlgorithm extends Migration
          * Questions, Answers, Answer Sets, Categories, and Weights
          */
 
-        /** Question Title */
         Schema::dropIfExists(self::TABLE_NAME_CUSTOM_CRITERION_WEIGHT);
         Schema::dropIfExists(self::TABLE_NAME_WEIGHTS);
         Schema::dropIfExists(self::TABLE_NAME_ANSWER_QUESTION_WEIGHT);
@@ -38,6 +38,8 @@ class MatchingAlgorithm extends Migration
         Schema::dropIfExists(self::TABLE_NAME_ANSWER_SETS);
         Schema::dropIfExists(self::TABLE_NAME_ANSWERS_WORDING);
         Schema::dropIfExists(self::TABLE_NAME_CRITERIA);
+
+        /** Question Title */
         Schema::create(
             self::TABLE_NAME_CRITERIA, function (Blueprint $table) {
             $table->increments('id');
@@ -49,7 +51,6 @@ class MatchingAlgorithm extends Migration
         /** Possible Answers to Questions */
         Schema::create(
             self::TABLE_NAME_ANSWERS_WORDING, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('answer_wording')->unique();
         });
@@ -57,7 +58,6 @@ class MatchingAlgorithm extends Migration
         /** Title of Answers Sets */
         Schema::create(
             self::TABLE_NAME_ANSWER_SETS, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('set_title')->unique();
 
@@ -66,39 +66,29 @@ class MatchingAlgorithm extends Migration
         /** Actual Pivot Table for Answer & Answer Set*/
         Schema::create(
             self::TABLE_NAME_ANSWER_SET, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-
             $table->unsignedInteger('set')->nullable();
             $table->unsignedInteger('answer')->nullable();
             $table->primary(['set', 'answer']);
-        });
-
-        Schema::table(self::TABLE_NAME_ANSWER_SET, function (Blueprint $table) {
-            $table->foreign('set')->references('id')->on(self::TABLE_NAME_ANSWER_SETS);
-            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING);
+            $table->foreign('set')->references('id')->on(self::TABLE_NAME_ANSWER_SETS)->onDelete('cascade');
+            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING)->onDelete('cascade');
         });
 
         /** answers that belong  to which question */
         Schema::create(
             self::TABLE_NAME_ANSWER_QUESTION, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+
             $table->unsignedInteger('thumbprint')->nullable()->unique();
             $table->unsignedInteger('answer')->nullable();
             $table->unsignedInteger('question')->nullable();
             $table->string('attribute_name')->unique();
             $table->primary(['answer', 'question']);
-
-        });
-
-        Schema::table(self::TABLE_NAME_ANSWER_QUESTION, function (Blueprint $table) {
-            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING);
-            $table->foreign('question')->references('id')->on(self::TABLE_NAME_CRITERIA);
+            $table->foreign('answer')->references('id')->on(self::TABLE_NAME_ANSWERS_WORDING)->onDelete('cascade');
+            $table->foreign('question')->references('id')->on(self::TABLE_NAME_CRITERIA)->onDelete('cascade');
         });
 
         /** the actual answers from the user to each question, pivot-table */
         Schema::create(
             self::TABLE_NAME_USER_ANSWER_QUESTION, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
             $table->unsignedInteger('user_id')->nullable();
             $table->foreign('answer_question_id')->references('thumbprint')
                   ->on(self::TABLE_NAME_ANSWER_QUESTION)
@@ -106,33 +96,26 @@ class MatchingAlgorithm extends Migration
 
             $table->unsignedInteger('answer_question_id')->nullable();
             $table->timestamps();
-
-        });
-        Schema::table(self::TABLE_NAME_USER_ANSWER_QUESTION, function (Blueprint $table) {
             $table->primary(['answer_question_id', 'user_id']);
-//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
         });
 
         /** Titles of Categories */
         Schema::create(
-        self::TABLE_NAME_QUESTIONS_CATEGORIES, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-        $table->increments('id');
+            self::TABLE_NAME_QUESTIONS_CATEGORIES, function (Blueprint $table) {
+
+            $table->increments('id');
             $table->string('category_title')->unique();
         });
 
         /** Weights of answers from within each question*/
         Schema::create(
             self::TABLE_NAME_ANSWER_QUESTION_WEIGHT, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+
             $table->increments('id');
             $table->unsignedInteger('answer')->nullable();
             $table->double('weight');
-        });
-        Schema::table(self::TABLE_NAME_ANSWER_QUESTION_WEIGHT, function (Blueprint $table) {
-            $table->foreign('answer')->references('thumbprint')->on(self::TABLE_NAME_ANSWER_QUESTION);
-
+            $table->foreign('answer')->references('thumbprint')->on(self::TABLE_NAME_ANSWER_QUESTION)
+                  ->onDelete('cascade');
         });
 
 
@@ -144,8 +127,6 @@ class MatchingAlgorithm extends Migration
 
         Schema::create(
             self::TABLE_NAME_WEIGHTS, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-
             $table->increments('id');
             $table->double('inequality_less_than_weight_value');
             $table->double('inequality_greater_than_weight_value');
@@ -153,9 +134,8 @@ class MatchingAlgorithm extends Migration
             //-1 for no category
             $table->unsignedInteger('category')->nullable();
             $table->string('description')->unique();
-        });
-        Schema::table(self::TABLE_NAME_WEIGHTS, function (Blueprint $table) {
-            $table->foreign('category')->references('id')->on(self::TABLE_NAME_QUESTIONS_CATEGORIES);
+            $table->foreign('category')->references('id')->on(self::TABLE_NAME_QUESTIONS_CATEGORIES)
+                  ->onDelete('cascade');
 
         });
 
@@ -163,18 +143,16 @@ class MatchingAlgorithm extends Migration
         /** For each user, they can choose to make an answer more important and it will save that here */
         Schema::create(
             self::TABLE_NAME_CUSTOM_CRITERION_WEIGHT, function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('answer')->nullable();
             $table->double('weight');
             $table->timestamps();
             $table->primary(['answer', 'user_id']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('answer')->references('thumbprint')->on(self::TABLE_NAME_ANSWER_QUESTION)
+                  ->onDelete('cascade');
         });
-        Schema::table(self::TABLE_NAME_CUSTOM_CRITERION_WEIGHT, function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('answer')->references('thumbprint')->on(self::TABLE_NAME_ANSWER_QUESTION);
-        });
-
 
     }
 
